@@ -55,7 +55,6 @@ void keydown(unsigned char key, int useless, int useless2) {
 	playerData.keypresses[int(key)] = true;
 	switch (key) {
 	case '`':
-		glLoadIdentity();
 		setDefaults();
 		break;
 	case 'p':
