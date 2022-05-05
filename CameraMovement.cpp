@@ -79,6 +79,10 @@ void keyboardMovement() {
 		moveForward(5);
 	if (playerData.keypresses[int('s')])
 		moveForward(-5);
+	if (playerData.keypresses[int('q')])
+		playerData.worldCoord.y += 5;
+	if (playerData.keypresses[int('e')])
+		playerData.worldCoord.y -= 5;
 }
 
 void mouseMovement(int x, int y) {
@@ -95,6 +99,6 @@ void cameraOrient() {
 	glRotatef(playerData.rotatePos.y, 1, 0, 0);
 	glRotatef(playerData.rotatePos.x, 0, 1, 0);
 	//Move user
-	glTranslatef(playerData.worldCoord.x, 0, playerData.worldCoord.z);
+	glTranslatef(playerData.worldCoord.x, playerData.worldCoord.y, playerData.worldCoord.z);
 	gluLookAt(eyePos.x, eyePos.y, eyePos.z, lookPos.x, lookPos.y, lookPos.z, 0, -1, 0);
 }
