@@ -7,6 +7,7 @@
 #pragma warning(disable : 4996)
 #include "PixelGeneration.h"
 #include "CameraMovement.h"
+DrawPixelGenerators pixelbois;
 
 void init_window(int argc, char** argv)
 {
@@ -43,7 +44,7 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	/* Clear color values */
 	glLoadIdentity();
 	cameraOrient();
-	drawParticles();
+	pixelbois.drawGenerators();
 	glBegin(GL_QUADS);
 	glColor3f(0, 1, 0);
 	glVertex3f(-100, 20, -100);
@@ -65,7 +66,9 @@ int main(int argc, char** argv)
 	setDefaults();
 	init_window(argc, argv);			/* Initialize window */
 	other_init();						/* Initialize other parameter */
-	createParticleSystem(0, 15, -7, 8, 8, -4);
+	
+	PixelGenerator pg(0, 15, -7, 8, 8, -4, 1500);
+	pixelbois.addGenerator(pg);
 	glutDisplayFunc(display); 			/* Redisplay callback event handling */
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(keydown);
