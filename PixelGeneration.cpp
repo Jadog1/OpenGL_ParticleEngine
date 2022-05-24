@@ -89,7 +89,7 @@ void PixelGenerator::drawParticles() {
 			particle.y += (particle.vy += 0.05);
 			particle.z += subtractIfNotZero(&particle.vz, negativeOf(particle.vz) * 0.01);
 			particle.life -= 0.01;
-			if (inRange(particle.vx, -.4, .4) || inRange(particle.vz, -.4, .4) || particle.y > position.y)
+			if (particle.y > position.y)
 				particle.life = 0;
 			draw3DParticle(particle);
 		}

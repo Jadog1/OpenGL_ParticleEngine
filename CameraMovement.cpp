@@ -52,7 +52,6 @@ void rotateWorld(int degrees, int xrotation=0, int degrees2=0, int yrotation=0) 
 }
 
 void keydown(unsigned char key, int useless, int useless2) {
-	playerData.keypresses[int(key)] = true;
 	switch (key) {
 	case '`':
 		setDefaults();
@@ -62,6 +61,9 @@ void keydown(unsigned char key, int useless, int useless2) {
 		break;
 	case 'Q':
 		exit(0);
+		break;
+	default:
+		playerData.keypresses[int(key)] = true;
 		break;
 	}
 }

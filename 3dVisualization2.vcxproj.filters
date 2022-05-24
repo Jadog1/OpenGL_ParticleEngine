@@ -15,21 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\3dVisualization\3dVisualization\PixelGeneration.cpp">
+    <ClCompile Include="..\..\3dVisualization2\3dVisualization2\CameraMovement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3dVisualization\3dVisualization\CameraMovement.cpp">
+    <ClCompile Include="..\..\3dVisualization2\3dVisualization2\Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\3dVisualization\3dVisualization\Main.cpp">
+    <ClCompile Include="..\..\3dVisualization2\3dVisualization2\PixelGeneration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FireGeneration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\3dVisualization\3dVisualization\CameraMovement.h">
+    <ClInclude Include="..\..\3dVisualization2\3dVisualization2\CameraMovement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\3dVisualization\3dVisualization\PixelGeneration.h">
+    <ClInclude Include="..\..\3dVisualization2\3dVisualization2\PixelGeneration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FireGeneration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

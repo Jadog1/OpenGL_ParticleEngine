@@ -16,7 +16,6 @@ struct coordAndPrev {
 	int prevX; int prevY;
 };
 void setDefaults();
-void myReader(unsigned char key, int useless, int useless2);
 void keyup(unsigned char key, int useless, int useless2);
 void keydown(unsigned char key, int useless, int useless2);
 void cameraOrient();

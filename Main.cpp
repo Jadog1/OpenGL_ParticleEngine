@@ -7,7 +7,9 @@
 #pragma warning(disable : 4996)
 #include "PixelGeneration.h"
 #include "CameraMovement.h"
+#include "FireGeneration.h"
 DrawPixelGenerators pixelbois;
+FireBoxHandler FireBoxes;
 
 void init_window(int argc, char** argv)
 {
@@ -45,12 +47,13 @@ void display(void)
 	glLoadIdentity();
 	cameraOrient();
 	pixelbois.drawGenerators();
+	FireBoxes.DrawFireBox();
 	glBegin(GL_QUADS);
 	glColor3f(0, 1, 0);
-	glVertex3f(-100, 20, -100);
-	glVertex3f(100, 20, -100);
-	glVertex3f(100, 17, 100);
-	glVertex3f(-100, 17, 100);
+	glVertex3f(-1000, 25, -1000);
+	glVertex3f(1000, 25, -1000);
+	glVertex3f(1000, 5, 1000);
+	glVertex3f(-1000, 5, 1000);
 	glEnd();
 	glutSwapBuffers();						/* Clear event buffer */
 }
@@ -67,8 +70,10 @@ int main(int argc, char** argv)
 	init_window(argc, argv);			/* Initialize window */
 	other_init();						/* Initialize other parameter */
 	
-	PixelGenerator pg(0, 15, -7, 8, 8, -4, 1500);
+	PixelGenerator pg(0, 15, -7, 8, 8, -4, 100);
+	FireBox fb(15, 15, -7, 10, 10, 5, 1);
 	pixelbois.addGenerator(pg);
+	FireBoxes.addFireBox(fb);
 	glutDisplayFunc(display); 			/* Redisplay callback event handling */
 	glutIgnoreKeyRepeat(1);
 	glutKeyboardFunc(keydown);
