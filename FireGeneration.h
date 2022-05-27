@@ -15,13 +15,17 @@ public:
 	float position[3];
 	float size[3];
 	float pixelSize;
-	FireBox(float posX, float posY, float posZ, float sizeX, float sizeY, float sizeZ, float pixelSize=1.0);
+	FireBox(float posX, float posY, float posZ, float sizeX, float sizeY, float sizeZ, float pixelSize=1.0, float percentFullSet=1);
 	void DrawFire();
 private:
 	std::vector<FireBall> fire;
+	float percentFull;
 	bool Collision(FireBall one, FireBall two);
-	void InitFireBallPosition(float position[3], float size[3]);
-	void setfireball(std::vector<FireBall>::iterator *it, float position[3]);
+	void InitFireBallPosition(float position[], float size[]);
+	void setfireball(std::vector<FireBall>::iterator *it, float position[]);
+	void ApplyForces(FireBall *fb);
+	void RandomizeVelocity(FireBall* fb);
+	bool FireballTemperature(FireBall* fb);
 };
 
 class FireBoxHandler {

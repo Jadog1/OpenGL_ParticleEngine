@@ -40,6 +40,16 @@ void other_init()
 	glutWarpPointer(300, 300);
 }
 
+void drawfloor() {
+	glBegin(GL_QUADS);
+	glColor3f(0, 1, 0);
+	glVertex3f(-1000, 25, -1000);
+	glVertex3f(1000, 25, -1000);
+	glVertex3f(1000, 5, 1000);
+	glVertex3f(-1000, 5, 1000);
+	glEnd();
+}
+
 void display(void)
 {
 	setProjection();
@@ -48,13 +58,7 @@ void display(void)
 	cameraOrient();
 	pixelbois.drawGenerators();
 	FireBoxes.DrawFireBox();
-	glBegin(GL_QUADS);
-	glColor3f(0, 1, 0);
-	glVertex3f(-1000, 25, -1000);
-	glVertex3f(1000, 25, -1000);
-	glVertex3f(1000, 5, 1000);
-	glVertex3f(-1000, 5, 1000);
-	glEnd();
+	//drawfloor();
 	glutSwapBuffers();						/* Clear event buffer */
 }
 
@@ -71,8 +75,8 @@ int main(int argc, char** argv)
 	other_init();						/* Initialize other parameter */
 	
 	PixelGenerator pg(0, 15, -7, 8, 8, -4, 100);
-	FireBox fb(15, 15, -7, 10, 10, 5, 1);
-	pixelbois.addGenerator(pg);
+	FireBox fb(15, 0, -7, 30, 30, 30, 1, 0.6);
+	//pixelbois.addGenerator(pg);
 	FireBoxes.addFireBox(fb);
 	glutDisplayFunc(display); 			/* Redisplay callback event handling */
 	glutIgnoreKeyRepeat(1);
