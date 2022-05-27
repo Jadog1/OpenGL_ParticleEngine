@@ -58,7 +58,7 @@ void display(void)
 	cameraOrient();
 	pixelbois.drawGenerators();
 	FireBoxes.DrawFireBox();
-	//drawfloor();
+	drawfloor();
 	glutSwapBuffers();						/* Clear event buffer */
 }
 
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 	other_init();						/* Initialize other parameter */
 	
 	PixelGenerator pg(0, 15, -7, 8, 8, -4, 100);
-	FireBox fb(15, 0, -7, 30, 30, 30, 1, 0.6);
+	FireBox fb(15, 0, -7, 15, 15, 15, 1, 0.3);
 	//pixelbois.addGenerator(pg);
 	FireBoxes.addFireBox(fb);
 	glutDisplayFunc(display); 			/* Redisplay callback event handling */

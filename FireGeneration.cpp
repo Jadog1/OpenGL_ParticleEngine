@@ -41,25 +41,17 @@ bool FireBox::Collision(FireBall fb1, FireBall fb2)
 		);
 }
 
-void FireBox::setfireball(std::vector<FireBall>::iterator *it, float position[]) {
-	if (*it == fire.end()) { 
-		printf("overflow");  return; }
-	for (int i = 0; i < 3; i++) {
-		(*it)->position[i] = position[i];
-	}
-	(*it)++;
-}
-
 void FireBox::ApplyForces(FireBall *fb)
 {
 
-	
+	float minheightvec = position[1] + size[1] - (pixelSize * 3);
 	if (fb->position[1] < position[1] + size[1]) {
 		fb->velocity[1] += 0.1;
-		fb->temperature -= 0.01;
+		if(fb->velocity[1] <= 0) fb->temperature = (fb->velocity[1]/-2);
 	}
-	float minheightvec = position[1] + size[1] - (pixelSize * 3);
-	if (fb->position[1] >= minheightvec && fb->position[1] <= position[1] + size[1]) {
+	if (fb->position[1] >= minheightvec) {
+		if (fb->position[1] >= position[1] + size[1])
+			fb->position[1] = position[1] + size[1];
 		RandomizeVelocity(fb);
 		fb->temperature = 1;
 	}
@@ -69,12 +61,12 @@ void FireBox::ApplyForces(FireBall *fb)
 
 void FireBox::RandomizeVelocity(FireBall* fb)
 {
-	fb->velocity[1] = -(rand() % 4);
+	fb->velocity[1] = -(rand() % 10)/5.0;
 }
 
 bool FireBox::FireballTemperature(FireBall* fb)
 {
-	bool drawPixel = true;//fb->temperature >= 0.3;
+	bool drawPixel = fb->temperature >= 0.3;
 	if (drawPixel) {
 		if (fb->temperature > 0.8)
 			glColor3f(1, 1, 1);
@@ -86,15 +78,22 @@ bool FireBox::FireballTemperature(FireBall* fb)
 	return drawPixel;
 }
 
+void FireBox::setfireball(std::vector<FireBall>::iterator* it, float position[]) {
+	if (*it == fire.end()) return;
+	for (int i = 0; i < 3; i++) {
+		(*it)->position[i] = position[i];
+	}
+	(*it)->temperature = 1;
+	(*it)++;
+}
+
 void FireBox::InitFireBallPosition(float position[], float size[])
 {
 	float positionAt[3] = { position[0], position[1], position[2] };
 	std::vector<FireBall>::iterator it = fire.begin();
 	for (int x = 0; x < size[0]; x += pixelSize) {
-		for (int y = 0; y < size[1]*percentFull; y += pixelSize) {
+		for (int y = 0; y < (int) floor(size[1]*percentFull); y += pixelSize) {
 			for (int z = 0; z < size[2]; z += pixelSize) {
-				//RandomizeVelocity(&(*it));
-				it->temperature = 1;
 				setfireball(&it, positionAt);
 				positionAt[2] += pixelSize;
 			}
