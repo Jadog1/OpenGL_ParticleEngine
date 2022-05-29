@@ -26,6 +26,8 @@ private:
 	void ApplyForces(FireBall *fb);
 	void RandomizeVelocity(FireBall* fb);
 	bool FireballTemperature(FireBall* fb);
+	void CollisionDifference(FireBall* fb);  //Collission with barriers
+	void CollisionDifference(FireBall* fb1, FireBall* fb2); //Collision with another object
 };
 
 class FireBoxHandler {

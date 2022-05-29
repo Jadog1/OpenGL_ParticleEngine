@@ -1,6 +1,26 @@
 #include "FireGeneration.h"
 #include <GL/freeglut.h>
 #include <stdlib.h>
+#include "MathHelper.h"
+
+void FireBox::CollisionDifference(FireBall *fb) {
+	if (fb->position[2] + pixelSize + fb->velocity[2] < position[2] ||
+		fb->position[2] > position[2] + size[2]) {
+		fb->velocity[2] = 0;
+		fb->temperature = 0;
+	}
+
+	if (fb->position[0] + pixelSize + fb->velocity[0] < position[0] ||
+		fb->position[0] + fb->velocity[0] > position[0] + size[0]) {
+		fb->velocity[0] = 0;
+		fb->temperature = 0;
+	}
+
+
+}
+void FireBox::CollisionDifference(FireBall* fb1, FireBall* fb2) {
+
+}
 
 void ValuesToArray(float xyz[], float x, float y, float z) {
 	xyz[0] = x, xyz[1] = y, xyz[2] = z;
@@ -12,18 +32,53 @@ FireBox::FireBox(float posX, float posY, float posZ, float sizeX, float sizeY, f
 	ValuesToArray(position, posX, posY, posZ);
 	ValuesToArray(size, sizeX, sizeY, sizeZ);
 	FireBox::pixelSize = pixelSize;
-	fire.resize((sizeX * (sizeY*percentFull) * sizeZ) / pixelSize);
+	float newSize = (sizeX * floor(sizeY * percentFull) * sizeZ);
+	fire.resize(newSize);
 	InitFireBallPosition(position, size);
+}
+
+void FireBox::ApplyForces(FireBall* fb)
+{
+
+	float minheightvec = position[1] + size[1] - (pixelSize * 3);
+	if (fb->position[1] < position[1] + size[1]) {
+		fb->velocity[1] += 0.03;
+		for(int i = 0; i < 3; i+=2) fb->velocity[i] += normalizedFlipped(fb->velocity[i])*0.025;
+		if (fb->velocity[1] <= 0) fb->temperature = (fb->velocity[1]*-1);
+		CollisionDifference(fb);
+	}
+	if (fb->position[1] >= minheightvec) {
+		if (fb->position[1] >= position[1] + size[1])
+			fb->position[1] = position[1] + size[1];
+		RandomizeVelocity(fb);
+		fb->temperature = 1;
+	}
+}
+
+bool FireBox::FireballTemperature(FireBall* fb)
+{
+	bool drawPixel = true;//fb->temperature >= 0.15;
+	if (drawPixel) {
+		if (fb->temperature > 0.7)
+			glColor3f(1, 1, 1);
+		else if (fb->temperature > 0.35)
+			glColor3f(fb->temperature, 0, 0);
+		else
+			glColor3f(0, 0, 0.5);
+	}
+	return drawPixel;
 }
 
 void FireBox::DrawFire()
 {
 	for (auto& fireball : fire) {
 		ApplyForces(&fireball);
+		for (int i = 0; i < 3; i++) fireball.position[i] += fireball.velocity[i];
 		if (FireballTemperature(&fireball)) {
 			glPushMatrix();
 			glTranslatef(fireball.position[0], fireball.position[1], fireball.position[2]);
-			glutSolidCube(pixelSize);
+			float pixelSizeVal = (pixelSize * fireball.temperature);
+			glutSolidCube((pixelSizeVal>0.5) ? pixelSizeVal : 0.5);
 			glPopMatrix();
 		}
 	}
@@ -41,45 +96,17 @@ bool FireBox::Collision(FireBall fb1, FireBall fb2)
 		);
 }
 
-void FireBox::ApplyForces(FireBall *fb)
-{
-
-	float minheightvec = position[1] + size[1] - (pixelSize * 3);
-	if (fb->position[1] < position[1] + size[1]) {
-		fb->velocity[1] += 0.1;
-		if(fb->velocity[1] <= 0) fb->temperature = (fb->velocity[1]/-2);
-	}
-	if (fb->position[1] >= minheightvec) {
-		if (fb->position[1] >= position[1] + size[1])
-			fb->position[1] = position[1] + size[1];
-		RandomizeVelocity(fb);
-		fb->temperature = 1;
-	}
-
-	for (int i = 0; i < 3; i++) fb->position[i] += fb->velocity[i];
-}
 
 void FireBox::RandomizeVelocity(FireBall* fb)
 {
-	fb->velocity[1] = -(rand() % 10)/5.0;
+	fb->velocity[1] = -(rand() % 6)/5.0;
+	fb->velocity[0] = (double)moveToMiddle(fb->position[0], position[0], position[0]+size[0]) * (rand() % 5) / 5.0;
+	fb->velocity[2] = (double)moveToMiddle(fb->position[2], position[2], position[2] + size[2]) * (rand() % 5) / 5.0;
 }
 
-bool FireBox::FireballTemperature(FireBall* fb)
-{
-	bool drawPixel = fb->temperature >= 0.3;
-	if (drawPixel) {
-		if (fb->temperature > 0.8)
-			glColor3f(1, 1, 1);
-		else if (fb->temperature > 0.5)
-			glColor3f(fb->temperature, 0, 0);
-		else
-			glColor3f(0, 0, 0.5);
-	}
-	return drawPixel;
-}
 
 void FireBox::setfireball(std::vector<FireBall>::iterator* it, float position[]) {
-	if (*it == fire.end()) return;
+	if (*it == fire.end()) { printf("YEP"); return; }
 	for (int i = 0; i < 3; i++) {
 		(*it)->position[i] = position[i];
 	}
@@ -91,19 +118,25 @@ void FireBox::InitFireBallPosition(float position[], float size[])
 {
 	float positionAt[3] = { position[0], position[1], position[2] };
 	std::vector<FireBall>::iterator it = fire.begin();
-	for (int x = 0; x < size[0]; x += pixelSize) {
-		for (int y = 0; y < (int) floor(size[1]*percentFull); y += pixelSize) {
-			for (int z = 0; z < size[2]; z += pixelSize) {
-				setfireball(&it, positionAt);
+	for (int x = 0; x < size[0]; x += 1) {
+		setfireball(&it, positionAt);
+		for (int y = 0; y < (int) floor((double)size[1]*percentFull); y += 1) {
+			positionAt[1] += (-pixelSize);
+			setfireball(&it, positionAt);
+			for (int z = 0; z < size[2]; z += 1) {
 				positionAt[2] += pixelSize;
+				setfireball(&it, positionAt);
 			}
 			positionAt[2] = position[2];
-			positionAt[1] += (-pixelSize);
 		}
 		positionAt[1] = position[1];
+		for (int z = 0; z < size[2]; z += 1) {
+			positionAt[2] += pixelSize;
+			setfireball(&it, positionAt);
+		}
+		positionAt[2] = position[2];
 		positionAt[0] += pixelSize;
 	}
-
 }
 
 void FireBoxHandler::addFireBox(FireBox fb)

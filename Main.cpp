@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 	other_init();						/* Initialize other parameter */
 	
 	PixelGenerator pg(0, 15, -7, 8, 8, -4, 100);
-	FireBox fb(15, 0, -7, 15, 15, 15, 1, 0.3);
+	FireBox fb(15, 10, 15, 20, 8, 20, 2, 0.5);
 	//pixelbois.addGenerator(pg);
 	FireBoxes.addFireBox(fb);
 	glutDisplayFunc(display); 			/* Redisplay callback event handling */

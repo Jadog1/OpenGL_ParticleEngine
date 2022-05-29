@@ -16,10 +16,6 @@ struct particleObj {
 	int rotate;
 	float life;
 };
-float subtractIfNotZero(float* velocity, float value);
-int positiveOrNegative();
-int negativeOf(float value);
-bool inRange(float x, float a, float b);
 
 class PixelGenerator {
 public:

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <algorithm>
 #include "PixelGeneration.h"
+#include "MathHelper.h"
 /*
 *Particle system developed by Jadon Steinmetz
 */
@@ -20,22 +21,6 @@ PixelGenerator::PixelGenerator(int positionArray[], int radiusArray[], int pixel
 	radius.x = radiusArray[0]; radius.y = radiusArray[1]; radius.z = radiusArray[2];
 	particles.resize(pixelCount);
 	shape = newShape;
-}
-
-float subtractIfNotZero(float* velocity, float value) {
-	if (*velocity > 0)
-		*velocity -= value;
-
-	return *velocity;
-}
-int positiveOrNegative() {
-	return ((rand() % 2) < 1 ? -1 : 1);
-}
-int negativeOf(float value) {
-	return (value < 0 ? -1 : 1);
-}
-bool inRange(float x, float a, float b) {
-	return (x >= a && x <= b);
 }
 
 void PixelGenerator::setPixelCount(int pixelCount) {
